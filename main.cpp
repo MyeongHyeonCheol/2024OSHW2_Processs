@@ -1,6 +1,6 @@
 #include "dynamic_queue.h"
 
-// 2-1 부분구현: enqueue(), dequeue(), promote(), merge() 구현
+// 2-1 부분구현: enqueue(), dequeue(), promote() 구현
 int main() {
 	DynamicQueue dq;
 	Process* p1 = new Process(1, ProcessType::BG);
