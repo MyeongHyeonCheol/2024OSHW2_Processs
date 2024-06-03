@@ -1,4 +1,4 @@
-#pragma once
+	#pragma once
 #include <iostream>
 #include <thread>
 #include <mutex>
@@ -108,6 +108,72 @@ private:
 		}
 	}
 	
+	// 리스트의 길이를 구하는 함수
+	int get_list_length(ListNode* list) {
+		int length = 0;
+		while (list) {
+			length++;
+			list = list->next;
+		}
+		return length;
+	}
+
+	// 리스트를 나누는 함수
+	ListNode* split_list(ListNode*& list, int split_index) {
+		ListNode* current = list;
+		ListNode* prev = nullptr;
+		int index = 0;
+
+		while (current && index < split_index) {
+			prev = current;
+			current = current->next;
+			index++;
+		}
+
+		if (prev) {
+			prev->next = nullptr;
+		}
+
+		ListNode* split_part = current;
+		return split_part;
+	}
+
+	// 리스트를 합치는 함수
+	void merge_lists(ListNode*& dest, ListNode* src) {
+		if (!dest) {
+			dest = src;
+		}
+		else {
+			ListNode* current = dest;
+			while (current->next) {
+				current = current->next;
+			}
+			current->next = src;
+		}
+	}
+
+	void split_n_merge(StackNode* stack_node) {
+		while (stack_node) {
+			int count = get_list_length(stack_node->process_list);
+			if (count > threshold) {
+				int mid = count / 2;
+				ListNode* split_part = split_list(stack_node->process_list, mid);
+
+				if (stack_node->next) {
+					merge_lists(stack_node->next->process_list, split_part);
+					split_n_merge(stack_node->next);
+				}
+				else {
+					StackNode* new_stack_node = new StackNode();
+					stack_node->next = new_stack_node;
+					merge_lists(new_stack_node->process_list, split_part);
+					top = new_stack_node;
+				}
+			}
+			stack_node = stack_node->next;
+		}
+	}
+
 	void promote() {
 		if (P == nullptr || P->process_list == nullptr || P->process_list->process == nullptr) {
 			return;
