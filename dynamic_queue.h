@@ -6,13 +6,13 @@
 
 using namespace std;
 
-// ÇÁ·Î¼¼½º ºĞ·ù: BG(background), FG(foreground)
+// í”„ë¡œì„¸ìŠ¤ ë¶„ë¥˜: BG(background), FG(foreground)
 enum class ProcessType {
 	BG,
 	FG
 };
 
-// ÇÁ·Î¼¼½º Å¬·¡½º
+// í”„ë¡œì„¸ìŠ¤ í´ë˜ìŠ¤
 class Process {
 private:
 	thread t;
@@ -20,7 +20,7 @@ private:
 	ProcessType type;
 	mutex mtx;
 
-	// ÀÓ½Ã thread ½ÇÇà ÇÔ¼ö
+	// ì„ì‹œ thread ì‹¤í–‰ í•¨ìˆ˜
 	void worker() {
 		for (int i = 0; i < 10; i++) {
 			Sleep(1000);
@@ -45,14 +45,14 @@ public:
 		return pid;
 	}
 
-	// ÇÁ·Î¼¼½º Å¸ÀÔÀ» ¹İÈ¯ÇÏ±â À§ÇÑ ÇÔ¼ö
+	// í”„ë¡œì„¸ìŠ¤ íƒ€ì…ì„ ë°˜í™˜í•˜ê¸° ìœ„í•œ í•¨ìˆ˜
 	ProcessType get_type() const {
 		return type;
 	}
 
 };
 
-// ÇÁ·Î¼¼½º ¸®½ºÆ® ³ëµå Å¬·¡½º
+// í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ ë…¸ë“œ í´ë˜ìŠ¤
 class ListNode {
 public:
 	Process* process;
@@ -61,7 +61,7 @@ public:
 	ListNode(Process* process) : process(process), next(nullptr) { }
 };
 
-// ½ºÅÃ ³ëµå Å¬·¡½º
+// ìŠ¤íƒ ë…¸ë“œ í´ë˜ìŠ¤
 class StackNode {
 public:
 	ListNode* process_list;
@@ -69,7 +69,7 @@ public:
 
 	StackNode() : process_list(new ListNode(nullptr)), next(nullptr) { }
 
-	// ½ºÅÃ ³ëµå ¼Ò¸êÀÚ: ³ëµå¸¦ »èÁ¦ÇÒ ¶§ ÀúÀåµÇÀÖ´ø ÇÁ·Î¼¼½º ¸®½ºÆ®¸¦ »èÁ¦ÇÔ
+	// ìŠ¤íƒ ë…¸ë“œ ì†Œë©¸ì: ë…¸ë“œë¥¼ ì‚­ì œí•  ë•Œ ì €ì¥ë˜ìˆë˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ë¥¼ ì‚­ì œí•¨
 	~StackNode() {
 		while (process_list) {
 			ListNode* temp = process_list;
@@ -81,24 +81,24 @@ public:
 
 class DynamicQueue {
 private:
-	StackNode* bottom; // ¹Ù´Ú ³ëµå
-	StackNode* top; // ¸Ç À§ ³ëµå
-	int threshold; // ÀÓ°èÄ¡
-	int process_count; // ÇÁ·Î¼¼½º °³¼ö: ÀÓ°èÄ¡¸¦ °è»êÇÏ±â À§ÇØ »ç¿ë
+	StackNode* bottom; // ë°”ë‹¥ ë…¸ë“œ
+	StackNode* top; // ë§¨ ìœ„ ë…¸ë“œ
+	int threshold; // ì„ê³„ì¹˜
+	int process_count; // í”„ë¡œì„¸ìŠ¤ ê°œìˆ˜: ì„ê³„ì¹˜ë¥¼ ê³„ì‚°í•˜ê¸° ìœ„í•´ ì‚¬ìš©
 	StackNode* P;
 
-	// ½ºÅÃ ³ëµå °³¼ö¸¦ ¾Ë¾Æ³»±â À§ÇÑ get ÇÔ¼ö
+	// ìŠ¤íƒ ë…¸ë“œ ê°œìˆ˜ë¥¼ ì•Œì•„ë‚´ê¸° ìœ„í•œ get í•¨ìˆ˜
 	int get_stack_node_count() {
 		int count = 0;
-		StackNode* current = bottom; // ÇöÀç ½ºÅÃÀº °¡Àå ¾Æ·¡¿¡ ÀÖ´Â ½ºÅÃÀ» °¡¸®Å´
-		while (current) { // current°¡ Á¸ÀçÇÏ¸é while ¹İº¹¹® ½ÇÇà
-			count++;  // °³¼ö¸¦ 1 Áõ°¡½ÃÅ´
-			current = current->next; // current´Â ´ÙÀ½ ³ëµå¸¦ °¡¸®Å´
+		StackNode* current = bottom; // í˜„ì¬ ìŠ¤íƒì€ ê°€ì¥ ì•„ë˜ì— ìˆëŠ” ìŠ¤íƒì„ ê°€ë¦¬í‚´
+		while (current) { // currentê°€ ì¡´ì¬í•˜ë©´ while ë°˜ë³µë¬¸ ì‹¤í–‰
+			count++;  // ê°œìˆ˜ë¥¼ 1 ì¦ê°€ì‹œí‚´
+			current = current->next; // currentëŠ” ë‹¤ìŒ ë…¸ë“œë¥¼ ê°€ë¦¬í‚´
 		}
 		return count;
 	}
 
-	// threshold ¾÷µ¥ÀÌÆ® ÇÔ¼ö
+	// threshold ì—…ë°ì´íŠ¸ í•¨ìˆ˜
 	void update_threshold() {
 		if (process_count == 0) {
 			threshold = 0;
@@ -107,19 +107,72 @@ private:
 			threshold = process_count / (get_stack_node_count() + 1);
 		}
 	}
+	
+	void promote() {
+		if (P == nullptr || P->process_list == nullptr || P->process_list->process == nullptr) {
+			return;
+		}
+
+		ListNode* P_head_node = P->process_list; // Pì˜ í—¤ë“œë…¸ë“œë¥¼ ì €ì¥
+		if (P->process_list->next) {
+			P->process_list = P->process_list->next; // Pì˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ë“¤ì„ ì•ë‹¹ê¹€
+		}
+		else {
+			P->process_list = nullptr;
+		}
+		P_head_node->next = nullptr;
+
+		if (P == top) { // Pê°€ topì´ë©´ ìƒˆë¡œìš´ ìŠ¤íƒ ë…¸ë“œë¥¼ ìƒì„±í•˜ê³  topì„ ì—°ê²° ë° ê°±ì‹ í•¨
+			StackNode* new_stack_node = new StackNode();
+			top->next = new_stack_node;
+			top = new_stack_node;
+			top->process_list = P_head_node;
+			P = bottom;
+		}
+		else { // Pê°€ topì´ ì•„ë‹ ë•Œ
+			ListNode* node = P->next->process_list;
+			if (!node) {
+				P->next->process_list = P_head_node;
+			}
+			else {
+				while (node->next) {
+					node = node->next;
+				}
+				node->next = P_head_node;
+			}
+		}
+
+		// P->process_listê°€ nullì´ë¼ë©´ Pë¥¼ ì‚­ì œí•˜ê³  ì´ì „ ë…¸ë“œì™€ ë‹¤ìŒ ë…¸ë“œë¥¼ ì—°ê²°í•¨
+		if (P->process_list == nullptr) {
+			if (P == bottom) {
+				bottom = P->next;
+			}
+			else {
+				StackNode* prev = bottom;
+				while (prev->next != P) {
+					prev = prev->next;
+				}
+				prev->next = P->next;
+			}
+
+			StackNode* temp = P;
+			P = P->next ? P->next : bottom;
+			delete temp;
+		}
+	}
 
 public:
-	// DQ »ı¼ºÀÚ: bottom¿¡´Â ½ºÅÃ ³ëµå¸¦ ÀúÀå, top¿¡´Â bottomÀ» ÀúÀåÇÔ -> ÃÊ±â »óÅÂ bottom = top
+	// DQ ìƒì„±ì: bottomì—ëŠ” ìŠ¤íƒ ë…¸ë“œë¥¼ ì €ì¥, topì—ëŠ” bottomì„ ì €ì¥í•¨ -> ì´ˆê¸° ìƒíƒœ bottom = top
 	DynamicQueue() : bottom(new StackNode()), top(bottom), threshold(0), process_count(0), P(bottom) { }
 
-	// euqueue: BGÀÎ °æ¿ì bottom ³ëµå¿¡, FGÀÎ °æ¿ì top ³ëµå ³¡¿¡ »ğÀÔ
+	// euqueue: BGì¸ ê²½ìš° bottom ë…¸ë“œì—, FGì¸ ê²½ìš° top ë…¸ë“œ ëì— ì‚½ì…
 	void enqueue(Process* process) {
-		if (process->get_type() == ProcessType::BG) { // ÇÁ·Î¼¼½º°¡ BGÀÎ °æ¿ì
+		if (process->get_type() == ProcessType::BG) { // í”„ë¡œì„¸ìŠ¤ê°€ BGì¸ ê²½ìš°
 			ListNode* new_node = new ListNode(process);
-			if (!bottom->process_list->process) { // bottom¿¡ ÇÁ·Î¼¼½º°¡ ¾ø´Â °æ¿ì ¹Ù·Î »ğÀÔ
+			if (!bottom->process_list->process) { // bottomì— í”„ë¡œì„¸ìŠ¤ê°€ ì—†ëŠ” ê²½ìš° ë°”ë¡œ ì‚½ì…
 				bottom->process_list = new_node;
 			}
-			else { // ÇÁ·Î¼¼½º°¡ ÀÖ´Â °æ¿ì ÇØ´ç ÇÁ·Î¼¼½ºÀÇ ³¡À» Ã£¾Æ »ğÀÔ
+			else { // í”„ë¡œì„¸ìŠ¤ê°€ ìˆëŠ” ê²½ìš° í•´ë‹¹ í”„ë¡œì„¸ìŠ¤ì˜ ëì„ ì°¾ì•„ ì‚½ì…
 				ListNode* temp = bottom->process_list;
 				while (temp->next) {
 					temp = temp->next;
@@ -130,9 +183,9 @@ public:
 				}
 			}
 		}
-		else if (process->get_type() == ProcessType::FG) { // ÇÁ·Î¼¼½º°¡ FGÀÎ °æ¿ì
+		else if (process->get_type() == ProcessType::FG) { // í”„ë¡œì„¸ìŠ¤ê°€ FGì¸ ê²½ìš°
 			ListNode* new_node = new ListNode(process);
-			if (!top->process_list->process) { // top¿¡ ÇÁ·Î¼¼½º°¡ Á¸ÀçÇÏÁö ¾Ê´Â °æ¿ì ¹Ù·Î »ğÀÔ
+			if (!top->process_list->process) { // topì— í”„ë¡œì„¸ìŠ¤ê°€ ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ê²½ìš° ë°”ë¡œ ì‚½ì…
 				top->process_list = new_node;
 				cout << new_node << endl;
 			}
@@ -146,10 +199,11 @@ public:
 		}
 		process_count++;
 		update_threshold();
+		promote();
 	}
 
 	Process* dequeue() {
-		if (!top->process_list->process) { // ÀúÀåµÈ ÇÁ·Î¼¼½º°¡ ¾ø´Â °æ¿ì
+		if (!top->process_list->process) { // ì €ì¥ëœ í”„ë¡œì„¸ìŠ¤ê°€ ì—†ëŠ” ê²½ìš°
 			return nullptr;
 		}
 
@@ -158,7 +212,7 @@ public:
 		Process* removed_process = removed_node->process;
 		delete removed_node;
 
-		// ÇÁ·Î¼¼½º »èÁ¦ ÀÌÈÄ top¿¡ ÇÁ·Î¼¼½º°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é topÀ» ÀÌÀü ³ëµå·Î ¿Å±â°í ÇØ´ç topÀ» »èÁ¦
+		// í”„ë¡œì„¸ìŠ¤ ì‚­ì œ ì´í›„ topì— í”„ë¡œì„¸ìŠ¤ê°€ ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´ topì„ ì´ì „ ë…¸ë“œë¡œ ì˜®ê¸°ê³  í•´ë‹¹ topì„ ì‚­ì œ
 		if (get_stack_node_count() > 1 && !top->process_list) {
 			StackNode* prev = bottom;
 			while (prev->next != top) {
@@ -170,6 +224,7 @@ public:
 		}
 		process_count--;
 		update_threshold();
+		promote();
 		return removed_process;
 	}
 };
